@@ -8,7 +8,7 @@ DESCRIPTION
 
 URI
 
-  http://codeforpeople.com/lib/ruby
+  http://github.com/ahoward/macaddr
   http://rubyforg.org/projects/codeforpeople
 
 INSTALL
@@ -16,13 +16,13 @@ INSTALL
   gem install macaddr
 
 HISTORY
+  1.1.0:
+    - added dependancy on systemu to work around butt-licky windoze io
+      capture: http://redmine.ruby-lang.org/issues/show/3215
 
   1.0.0:
-
     - rdoc added
-
     - eric hodel kicks ass.  to find why, see
-
       http://drawohara.com/post/44678286/eric-hodel-kicks-ass
 
 SYNOPSIS
