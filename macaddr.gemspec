@@ -12,7 +12,7 @@ Gem::Specification::new do |spec|
 ["LICENSE", "README", "Rakefile", "lib", "lib/macaddr.rb", "macaddr.gemspec"]
 
   spec.executables = []
-  
+
   spec.require_path = "lib"
 
   spec.test_files = nil
