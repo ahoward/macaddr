@@ -1,4 +1,5 @@
 require 'mac/version'
+require 'systemu'
 
 ##
 # Cross platform MAC address determination.  Works for:
