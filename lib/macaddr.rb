@@ -20,7 +20,6 @@ rescue LoadError
   nil
 end
 
-require 'systemu'
 
 module Mac
   VERSION = '1.2.0'
