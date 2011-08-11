@@ -3,7 +3,7 @@
 
 Gem::Specification::new do |spec|
   spec.name = "macaddr"
-  spec.version = "1.2.0"
+  spec.version = "1.2.1"
   spec.platform = Gem::Platform::RUBY
   spec.summary = "macaddr"
   spec.description = "description: macaddr kicks the ass"
