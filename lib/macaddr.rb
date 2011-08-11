@@ -15,17 +15,6 @@ require 'mac/version'
 #
 #   Mac.address.list
 #
-
-begin
-  require 'rubygems'
-rescue LoadError
-  nil
-end
-
-require 'systemu'
-
-
-
 module Mac
   class << self
     def version
