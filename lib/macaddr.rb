@@ -1,3 +1,5 @@
+require 'mac/version'
+
 ##
 # Cross platform MAC address determination.  Works for:
 # * /sbin/ifconfig
@@ -22,12 +24,13 @@ end
 
 require 'systemu'
 
+
+
 module Mac
-  VERSION = '1.2.0'
-
-  def Mac.version() ::Mac::VERSION end
-
   class << self
+    def version
+      ::Mac::VERSION
+    end
 
     ##
     # Accessor for the system's first MAC address, requires a call to #address
