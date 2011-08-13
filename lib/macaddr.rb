@@ -23,9 +23,18 @@ end
 require 'systemu'
 
 module Mac
-  VERSION = '1.2.0'
+  VERSION = '1.2.1'
 
-  def Mac.version() ::Mac::VERSION end
+  def Mac.version
+    ::Mac::VERSION
+  end
+
+  def Mac.dependencies
+    {
+      'systemu' => [ 'systemu' , '~> 2.2.0' ]
+    }
+  end
+
 
   class << self
 

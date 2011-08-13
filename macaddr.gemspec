@@ -3,7 +3,7 @@
 
 Gem::Specification::new do |spec|
   spec.name = "macaddr"
-  spec.version = "1.2.0"
+  spec.version = "1.2.1"
   spec.platform = Gem::Platform::RUBY
   spec.summary = "macaddr"
   spec.description = "description: macaddr kicks the ass"
@@ -17,8 +17,9 @@ Gem::Specification::new do |spec|
 
   spec.test_files = nil
 
-### spec.add_dependency 'lib', '>= version'
-#### spec.add_dependency 'map'
+  
+    spec.add_dependency(*["systemu", "~> 2.2.0"])
+  
 
   spec.extensions.push(*[])
 
