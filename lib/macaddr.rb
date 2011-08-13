@@ -23,7 +23,7 @@ end
 require 'systemu'
 
 module Mac
-  VERSION = '1.2.1'
+  VERSION = '1.3.0'
 
   def Mac.version
     ::Mac::VERSION
@@ -58,25 +58,30 @@ module Mac
 
       null = test(?e, '/dev/null') ? '/dev/null' : 'NUL'
 
-      lines = nil
+      output = nil
       cmds.each do |cmd|
         status, stdout, stderr = systemu(cmd) rescue next
         next unless stdout and stdout.size > 0
-        lines = stdout.split(/\n/) and break
+        output = stdout and break
       end
-      raise "all of #{ cmds.join ' ' } failed" unless lines
+      raise "all of #{ cmds.join ' ' } failed" unless output
 
-      candidates = lines.select{|line| line =~ re}
+      @mac_address = parse(output)
+    end
+
+    def parse(output)
+      lines = output.split(/\n/)
+
+      candidates = lines.select{|line| line =~ RE}
       raise 'no mac address candidates' unless candidates.first
-      candidates.map!{|c| c[re].strip}
+      candidates.map!{|c| c[RE].strip}
 
       maddr = candidates.first
       raise 'no mac address found' unless maddr
 
       maddr.strip!
       maddr.instance_eval{ @list = candidates; def list() @list end }
-
-      @mac_address = maddr
+      maddr
     end
 
     ##
@@ -84,6 +89,8 @@ module Mac
 
     alias_method "addr", "address"
   end
+
+  RE = %r/(?:[^:\-]|\A)(?:[0-9A-F][0-9A-F][:\-]){5}[0-9A-F][0-9A-F](?:[^:\-]|\Z)/io
 end
 
-Macaddr = Mac
+MacAddr = Macaddr = Mac
