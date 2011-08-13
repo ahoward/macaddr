@@ -21,6 +21,8 @@ Gem::Specification::new do |spec|
     spec.add_dependency(*["systemu", "~> 2.2.0"])
   
 
+  spec.add_dependency 'systemu', '~> 2.2.0'
+
   spec.extensions.push(*[])
 
   spec.rubyforge_project = "codeforpeople"
