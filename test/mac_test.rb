@@ -19,6 +19,8 @@ Testing Mac do
 end
 
 
+### c8\:bc\:c8\:9b\:28\:b1
+
 BEGIN {
   $testdir = File.dirname(File.expand_path(__FILE__))
   $rootdir = File.dirname($testdir)
@@ -28,10 +30,11 @@ BEGIN {
 
   $datadir = File.join($testdir, 'data')
   $data = {}
-  glob = File.join($datadir, '**/**')
-  Dir.glob(glob) do |entry|
-    key = File.basename(entry)
-    val = IO.read(entry)
-    $data[key] = val
+
+  {
+    'c8:bc:c8:9b:28:b1' => 'osx'
+  }.each do |expected, basename|
+    entry = File.join($datadir, basename)
+    $data[expected] = IO.read(entry)
   end
 }

@@ -3,13 +3,23 @@
 
 Gem::Specification::new do |spec|
   spec.name = "macaddr"
-  spec.version = "1.2.1"
+  spec.version = "1.4.0"
   spec.platform = Gem::Platform::RUBY
   spec.summary = "macaddr"
   spec.description = "description: macaddr kicks the ass"
 
   spec.files =
-["LICENSE", "README", "Rakefile", "lib", "lib/macaddr.rb", "macaddr.gemspec"]
+["LICENSE",
+ "README",
+ "Rakefile",
+ "lib",
+ "lib/macaddr.rb",
+ "macaddr.gemspec",
+ "test",
+ "test/data",
+ "test/data/osx",
+ "test/mac_test.rb",
+ "test/testing.rb"]
 
   spec.executables = []
   
