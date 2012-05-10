@@ -23,7 +23,7 @@ end
 require 'systemu'
 
 module Mac
-  VERSION = '1.4.0'
+  VERSION = '1.5.0'
 
   def Mac.version
     ::Mac::VERSION
