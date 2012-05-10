@@ -54,7 +54,7 @@ module Mac
     def address
       return @mac_address if defined? @mac_address and @mac_address
       re = %r/[^:\-](?:[0-9A-F][0-9A-F][:\-]){5}[0-9A-F][0-9A-F][^:\-]/io
-      cmds = '/sbin/ifconfig', '/bin/ifconfig', 'ifconfig', 'ipconfig /all'
+      cmds = '/sbin/ifconfig', '/bin/ifconfig', 'ifconfig', 'ipconfig /all', 'cat /sys/class/net/*/address'
 
       null = test(?e, '/dev/null') ? '/dev/null' : 'NUL'
 
