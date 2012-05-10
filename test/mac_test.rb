@@ -32,7 +32,8 @@ BEGIN {
   $data = {}
 
   {
-    'c8:bc:c8:9b:28:b1' => 'osx'
+    'c8:bc:c8:9b:28:b1' => 'osx',
+    'd0:4e:f1:68:29:79' => 'noifconfig'
   }.each do |expected, basename|
     entry = File.join($datadir, basename)
     $data[expected] = IO.read(entry)
