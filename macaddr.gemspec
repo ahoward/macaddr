@@ -31,7 +31,7 @@ Gem::Specification::new do |spec|
   spec.test_files = nil
 
   
-    spec.add_dependency(*["systemu", "~> 2.2.0"])
+    spec.add_dependency(*["systemu", "~> 2.5.0"])
   
 
   spec.extensions.push(*[])
