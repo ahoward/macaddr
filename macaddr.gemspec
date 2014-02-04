@@ -7,6 +7,7 @@ Gem::Specification::new do |spec|
   spec.platform = Gem::Platform::RUBY
   spec.summary = "macaddr"
   spec.description = "description: macaddr kicks the ass"
+  spec.license = 'Ruby'
 
   spec.files =
 ["Gemfile",
