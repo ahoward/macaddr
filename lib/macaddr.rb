@@ -23,7 +23,7 @@ end
 require 'systemu'
 
 module Mac
-  VERSION = '1.6.1'
+  VERSION = '1.6.2'
 
   def Mac.version
     ::Mac::VERSION
@@ -33,6 +33,10 @@ module Mac
     {
       'systemu' => [ 'systemu' , '~> 2.5.0' ]
     }
+  end
+
+  def Mac.description
+    'cross platform mac address determination for ruby'
   end
 
 
