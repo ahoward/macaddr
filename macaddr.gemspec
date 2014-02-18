@@ -10,29 +10,33 @@ Gem::Specification::new do |spec|
   spec.license = "same as ruby's"
 
   spec.files =
-["Gemfile",
- "LICENSE",
- "README",
- "Rakefile",
- "lib",
- "lib/macaddr.rb",
- "macaddr.gemspec",
- "rvmrc.example",
- "test",
- "test/data",
- "test/data/noifconfig",
- "test/data/osx",
- "test/mac_test.rb",
- "test/testing.rb"]
+  [ "Gemfile",
+    "LICENSE",
+    "README",
+    "Rakefile",
+    "lib",
+    "lib/macaddr.rb",
+    "macaddr.gemspec",
+    "rvmrc.example",
+    "test",
+    "test/data",
+    "test/data/noifconfig",
+    "test/data/osx",
+    "test/mac_test.rb",
+    "test/testing.rb" ]
 
   spec.executables = []
-  
+
   spec.require_path = "lib"
 
   spec.test_files = nil
 
-### spec.add_dependency 'lib', '>= version'
-#### spec.add_dependency 'map'
+  spec.add_runtime_dependency "systemu", "~> 2.5.0"
+  # spec.add_runtime_dependency "systemu", "~> 2.6.2"
+
+  ##
+  # spec.add_dependency 'lib', '>= version'
+  # spec.add_dependency 'map'
 
   spec.extensions.push(*[])
 
