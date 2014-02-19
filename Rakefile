@@ -128,6 +128,9 @@ task :gemspec do
 
             spec.test_files = #{ test_files.inspect }
 
+            spec.add_runtime_dependency "systemu", "~> 2.5.2"
+            # spec.add_runtime_dependency "systemu", "~> 2.6.2"
+
           ### spec.add_dependency 'lib', '>= version'
           #### spec.add_dependency 'map'
 
