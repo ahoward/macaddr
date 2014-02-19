@@ -34,6 +34,9 @@ Gem::Specification::new do |spec|
 ### spec.add_dependency 'lib', '>= version'
 #### spec.add_dependency 'map'
 
+  
+    spec.add_dependency(*["systemu", "~> 2.5.0"])
+  
   spec.extensions.push(*[])
 
   spec.rubyforge_project = "codeforpeople"
