@@ -131,6 +131,9 @@ task :gemspec do
           ### spec.add_dependency 'lib', '>= version'
           #### spec.add_dependency 'map'
 
+            <% This.object.dependencies.each do |k, v| %>
+              spec.add_dependency(*<%= v %>)
+            <% end %>
             spec.extensions.push(*#{ extensions.inspect })
 
             spec.rubyforge_project = #{ This.rubyforge_project.inspect }
