@@ -130,8 +130,11 @@ task :gemspec do
             spec.add_runtime_dependency "systemu", "~> 2.5.2"
             # spec.add_runtime_dependency "systemu", "~> 2.6.2"
 
-            # spec.add_dependency 'lib', '>= version'
-            # spec.add_dependency 'map'
+            spec.add_runtime_dependency "systemu", "~> 2.5.2"
+            # spec.add_runtime_dependency "systemu", "~> 2.6.2"
+
+          ### spec.add_dependency 'lib', '>= version'
+          #### spec.add_dependency 'map'
 
             spec.extensions.push(*#{ extensions.inspect })
 
