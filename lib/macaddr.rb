@@ -23,7 +23,7 @@ end
 require 'systemu'
 
 module Mac
-  VERSION = '1.6.2'
+  VERSION = '1.6.5'
 
   def Mac.version
     ::Mac::VERSION
@@ -31,7 +31,7 @@ module Mac
 
   def Mac.dependencies
     {
-      'systemu' => [ 'systemu' , '~> 2.5.0' ]
+      'systemu' => [ 'systemu' , '~> 2.6.2' ]
     }
   end
 
