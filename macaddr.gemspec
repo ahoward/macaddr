@@ -7,7 +7,7 @@ Gem::Specification::new do |spec|
   spec.platform = Gem::Platform::RUBY
   spec.summary = "macaddr"
   spec.description = "cross platform mac address determination for ruby"
-  spec.license = "same as ruby's"
+  spec.license = "Ruby"
 
   spec.files =
 ["Gemfile",
