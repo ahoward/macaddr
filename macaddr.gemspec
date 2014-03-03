@@ -3,7 +3,7 @@
 
 Gem::Specification::new do |spec|
   spec.name = "macaddr"
-  spec.version = "1.6.6"
+  spec.version = "1.6.7"
   spec.platform = Gem::Platform::RUBY
   spec.summary = "macaddr"
   spec.description = "cross platform mac address determination for ruby"
