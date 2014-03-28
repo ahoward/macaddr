@@ -21,6 +21,7 @@ rescue LoadError
 end
 
 require 'systemu'
+require 'socket'
 
 module Mac
   VERSION = '1.6.7'
@@ -57,6 +58,10 @@ module Mac
 
     def address
       return @mac_address if defined? @mac_address and @mac_address
+
+      @mac_address = from_getifaddrs
+      return @mac_address if @mac_address
+
       cmds = '/sbin/ifconfig', '/bin/ifconfig', 'ifconfig', 'ipconfig /all', 'cat /sys/class/net/*/address'
 
       output = nil
@@ -68,6 +73,21 @@ module Mac
       raise "all of #{ cmds.join ' ' } failed" unless output
 
       @mac_address = parse(output)
+    end
+
+    def from_getifaddrs
+      return unless Socket.respond_to? :getifaddrs
+
+      mac, =
+        Socket.getifaddrs.select do |addr|
+          addr.addr.pfamily == Socket::PF_LINK
+        end.map do |addr|
+          addr.addr.getnameinfo
+        end.find do |mac,|
+          !mac.empty?
+        end
+
+      @mac_address = mac if mac
     end
 
     def parse(output)
