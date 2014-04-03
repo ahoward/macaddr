@@ -83,8 +83,8 @@ module Mac
           addr.addr.pfamily == Socket::PF_LINK
         end.map do |addr|
           addr.addr.getnameinfo
-        end.find do |mac,|
-          !mac.empty?
+        end.find do |m,|
+          !m.empty?
         end
 
       @mac_address = mac if mac
