@@ -75,16 +75,30 @@ module Mac
       @mac_address = parse(output)
     end
 
+    link   = Socket::PF_LINK   if Socket.const_defined? :PF_LINK
+    packet = Socket::PF_PACKET if Socket.const_defined? :PF_PACKET
+    INTERFACE_PACKET_FAMILY = link || packet # :nodoc:
+
     def from_getifaddrs
       return unless Socket.respond_to? :getifaddrs
 
+      interfaces = Socket.getifaddrs.select do |addr|
+        addr.pfamily = INTERFACE_PACKET_FAMILY
+      end
+
       mac, =
-        Socket.getifaddrs.select do |addr|
-          addr.addr.pfamily == Socket::PF_LINK
-        end.map do |addr|
-          addr.addr.getnameinfo
-        end.find do |m,|
-          !m.empty?
+        if Socket.const_defined? :PF_LINK then
+          interfaces.map do |addr|
+            addr.addr.getnameinfo
+          end.find do |m,|
+            !m.empty?
+          end
+        elsif Socket.const_defined? :PF_PACKET then
+          interfaces.map do |addr|
+            addr.addr.inspect_sockaddr[/hwaddr=([\h:]+)/, 1]
+          end.find do |mac_addr|
+            mac_addr != '00:00:00:00:00:00'
+          end
         end
 
       @mac_address = mac if mac
