@@ -1,9 +1,5 @@
 ##
-# Cross platform MAC address determination.  Works for:
-# * /sbin/ifconfig
-# * /bin/ifconfig
-# * ifconfig
-# * ipconfig /all
+# Cross platform MAC address determination.
 #
 # To return the first MAC address on the system:
 #
@@ -11,8 +7,7 @@
 #
 # To return an array of all MAC addresses:
 #
-#   Mac.address.list
-#
+#   Mac.addresses
 
 begin
   require 'rubygems'
@@ -20,7 +15,6 @@ rescue LoadError
   nil
 end
 
-require 'systemu'
 require 'socket'
 
 module Mac
@@ -32,7 +26,6 @@ module Mac
 
   def Mac.dependencies
     {
-      'systemu' => [ 'systemu' , '~> 2.6.2' ]
     }
   end
 
@@ -54,30 +47,27 @@ module Mac
     # MAC address, and includes an accessor #list for the remaining addresses:
     #
     #   Mac.addr # => first address
-    #   Mac.addr.list # => all addresses
+    #   Mac.addrs # => all addresses
 
     def address
-      return @mac_address if defined? @mac_address and @mac_address
+      @mac_address ||= addresses.first
+    end
 
-      @mac_address = from_getifaddrs
-      return @mac_address if @mac_address
-
-      cmds = '/sbin/ifconfig', '/bin/ifconfig', 'ifconfig', 'ipconfig /all', 'cat /sys/class/net/*/address'
-
-      output = nil
-      cmds.each do |cmd|
-        _, stdout, _ = systemu(cmd) rescue next
-        next unless stdout and stdout.size > 0
-        output = stdout and break
-      end
-      raise "all of #{ cmds.join ' ' } failed" unless output
-
-      @mac_address = parse(output)
+    def addresses
+      @mac_addresses ||= from_getifaddrs || []
     end
 
     link   = Socket::PF_LINK   if Socket.const_defined? :PF_LINK
     packet = Socket::PF_PACKET if Socket.const_defined? :PF_PACKET
     INTERFACE_PACKET_FAMILY = link || packet # :nodoc:
+
+    ##
+    # Shorter aliases for #address and #addresses
+
+    alias_method "addr", "address"
+    alias_method "addrs", "addresses"
+
+    private
 
     def from_getifaddrs
       return unless Socket.respond_to? :getifaddrs
@@ -86,46 +76,22 @@ module Mac
         addr.addr.pfamily == INTERFACE_PACKET_FAMILY
       end
 
-      mac, =
-        if Socket.const_defined? :PF_LINK then
-          interfaces.map do |addr|
-            addr.addr.getnameinfo
-          end.find do |m,|
-            !m.empty?
-          end
-        elsif Socket.const_defined? :PF_PACKET then
-          interfaces.map do |addr|
-            addr.addr.inspect_sockaddr[/hwaddr=([\h:]+)/, 1]
-          end.find do |mac_addr|
-            mac_addr != '00:00:00:00:00:00'
-          end
+      if Socket.const_defined? :PF_LINK then
+        interfaces.map do |addr|
+          addr.addr.getnameinfo
+        end.flatten.select do |m|
+          !m.empty?
         end
-
-      @mac_address = mac if mac
+      elsif Socket.const_defined? :PF_PACKET then
+        interfaces.map do |addr|
+          addr.addr.inspect_sockaddr[/hwaddr=([\h:]+)/, 1]
+        end.select do |mac_addr|
+          mac_addr != '00:00:00:00:00:00'
+        end
+      end
     end
 
-    def parse(output)
-      lines = output.split(/\n/)
-
-      candidates = lines.select{|line| line =~ RE}
-      raise 'no mac address candidates' unless candidates.first
-      candidates.map!{|c| c[RE].strip}
-
-      maddr = candidates.first
-      raise 'no mac address found' unless maddr
-
-      maddr.strip!
-      maddr.instance_eval{ @list = candidates; def list() @list end }
-      maddr
-    end
-
-    ##
-    # Shorter alias for #address
-
-    alias_method "addr", "address"
   end
-
-  RE = %r/(?:[^:\-]|\A)(?:[0-9A-F][0-9A-F][:\-]){5}[0-9A-F][0-9A-F](?:[^:\-]|\Z)/io
 end
 
 MacAddr = Macaddr = Mac

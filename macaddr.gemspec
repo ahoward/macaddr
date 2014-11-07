@@ -26,14 +26,10 @@ Gem::Specification::new do |spec|
  "test/testing.rb"]
 
   spec.executables = []
-  
+
   spec.require_path = "lib"
 
   spec.test_files = nil
-
-  
-    spec.add_dependency(*["systemu", "~> 2.6.2"])
-  
 
   spec.extensions.push(*[])
 
