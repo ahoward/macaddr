@@ -73,7 +73,7 @@ module Mac
       return unless Socket.respond_to? :getifaddrs
 
       interfaces = Socket.getifaddrs.select do |addr|
-        addr.addr.pfamily == INTERFACE_PACKET_FAMILY
+        addr.addr && addr.addr.pfamily == INTERFACE_PACKET_FAMILY
       end
 
       if Socket.const_defined? :PF_LINK then
