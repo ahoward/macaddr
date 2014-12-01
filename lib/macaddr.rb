@@ -83,7 +83,9 @@ module Mac
       return unless Socket.respond_to? :getifaddrs
 
       interfaces = Socket.getifaddrs.select do |addr|
-        addr.addr.pfamily == INTERFACE_PACKET_FAMILY
+        if addr.addr  # Some VPN ifcs don't have an addr - ignore them
+          addr.addr.pfamily == INTERFACE_PACKET_FAMILY
+        end
       end
 
       mac, =
