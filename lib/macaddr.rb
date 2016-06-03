@@ -64,6 +64,10 @@ module Mac
       @mac_addresses ||= from_getifaddrs || from_system
     end
 
+    link   = Socket::PF_LINK   if Socket.const_defined? :PF_LINK
+    packet = Socket::PF_PACKET if Socket.const_defined? :PF_PACKET
+    INTERFACE_PACKET_FAMILY = link || packet # :nodoc:
+
     ##
     # Shorter alias for #address
 
@@ -110,10 +114,6 @@ module Mac
       macs = lines.select{|line| line =~ RE}
       macs.map!{|c| c[RE].strip}
     end
-
-    link   = Socket::PF_LINK   if Socket.const_defined? :PF_LINK
-    packet = Socket::PF_PACKET if Socket.const_defined? :PF_PACKET
-    INTERFACE_PACKET_FAMILY = link || packet # :nodoc:
   end
 
   RE = %r/(?:[^:\-]|\A)(?:[0-9A-F][0-9A-F][:\-]){5}[0-9A-F][0-9A-F](?:[^:\-]|\Z)/io
