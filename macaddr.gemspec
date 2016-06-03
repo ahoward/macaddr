@@ -3,11 +3,12 @@
 
 Gem::Specification::new do |spec|
   spec.name = "macaddr"
-  spec.version = "1.7.0"
+  spec.version = "2.0.0"
   spec.platform = Gem::Platform::RUBY
   spec.summary = "macaddr"
   spec.description = "cross platform mac address determination for ruby"
   spec.license = "Ruby"
+  spec.required_ruby_version = ">= 2.1.0"
 
   spec.files =
 ["Gemfile",

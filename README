@@ -16,7 +16,11 @@ INSTALL
   gem install macaddr
 
 HISTORY
-  New:
+  2.0.0:
+    - Add Mac.addresses to list all MAC addresses
+    - Remove Mac.address.list method
+    - Set minimum Ruby version as 2.1.0
+  1.7.x:
     - added a Gemfile for easier testing/dev with Bundler
     - added an example .rvmrc file that will setup for ruby 1.9.3
     - updated systemu gem to ~>2.4.0 to work with ruby 1.9.3
@@ -34,5 +38,12 @@ SYNOPSIS
 
   require 'macaddr'
 
-  Mac.addr      #=> first mac addr on your system
-  Mac.addr.list #=> all mac addrs on your system
+  # First mac addr on your system
+  Mac.addr
+  # or
+  Mac.address
+
+  # All mac addrs on your system
+  Mac.addrs
+  # or
+  Mac.addresses
