@@ -16,7 +16,11 @@ INSTALL
   gem install macaddr
 
 HISTORY
-  New:
+  2.0.0:
+    - Get rid of systemu, only use Ruby's Socket.getifaddrs
+    - Actually implement array of all macs as #addrs
+    - Require Ruby >= 2.1.0
+  1.7.x:
     - added a Gemfile for easier testing/dev with Bundler
     - added an example .rvmrc file that will setup for ruby 1.9.3
     - updated systemu gem to ~>2.4.0 to work with ruby 1.9.3
@@ -35,4 +39,4 @@ SYNOPSIS
   require 'macaddr'
 
   Mac.addr      #=> first mac addr on your system
-  Mac.addr.list #=> all mac addrs on your system
+  Mac.addrs #=> all mac addrs on your system
