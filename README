@@ -22,7 +22,7 @@ HISTORY
     - updated systemu gem to ~>2.4.0 to work with ruby 1.9.3
 
   1.1.0:
-    - added dependancy on systemu to work around butt-licky windoze io
+    - added dependency on systemu to work around butt-licky windoze io
       capture: http://redmine.ruby-lang.org/issues/show/3215
 
   1.0.0:
