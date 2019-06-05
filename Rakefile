@@ -4,7 +4,7 @@ This.email = "ara.t.howard@gmail.com"
 This.homepage = "https://github.com/ahoward/#{ This.lib }"
 
 task :license do
-  open('LICENSE', 'w'){|fd| fd.puts "Ruby"}
+  open('LICENSE', 'w'){|fd| fd.puts "same as ruby's"}
 end
 
 task :default do
@@ -93,7 +93,7 @@ task :gemspec do
   test_files  = "test/#{ lib }.rb" if File.file?("test/#{ lib }.rb")
   summary     = object.respond_to?(:summary) ? object.summary : "summary: #{ lib } kicks the ass"
   description = object.respond_to?(:description) ? object.description : "description: #{ lib } kicks the ass"
-  license     = object.respond_to?(:license) ? object.license : "Ruby"
+  license     = object.respond_to?(:license) ? object.license : "same as ruby's"
 
   if This.extensions.nil?
     This.extensions = []

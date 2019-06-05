@@ -24,7 +24,7 @@ require 'systemu'
 require 'socket'
 
 module Mac
-  VERSION = '1.7.1'
+  VERSION = '1.7.2'
 
   def Mac.version
     ::Mac::VERSION
@@ -32,7 +32,7 @@ module Mac
 
   def Mac.dependencies
     {
-      'systemu' => [ 'systemu' , '~> 2.6.2' ]
+      'systemu' => [ 'systemu' , '~> 2.6.5' ]
     }
   end
 
