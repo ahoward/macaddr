@@ -3,7 +3,7 @@
 
 Gem::Specification::new do |spec|
   spec.name = "macaddr"
-  spec.version = "1.7.0"
+  spec.version = "1.7.2"
   spec.platform = Gem::Platform::RUBY
   spec.summary = "macaddr"
   spec.description = "cross platform mac address determination for ruby"
@@ -11,6 +11,7 @@ Gem::Specification::new do |spec|
 
   spec.files =
 ["Gemfile",
+ "Gemfile.lock",
  "LICENSE",
  "README",
  "Rakefile",
@@ -32,7 +33,7 @@ Gem::Specification::new do |spec|
   spec.test_files = nil
 
   
-    spec.add_dependency(*["systemu", "~> 2.6.2"])
+    spec.add_dependency(*["systemu", "~> 2.6.5"])
   
 
   spec.extensions.push(*[])
