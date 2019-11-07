@@ -4,6 +4,7 @@
 # * /bin/ifconfig
 # * ifconfig
 # * ipconfig /all
+# * cat /sys/class/net/*/address
 #
 # To return the first MAC address on the system:
 #
@@ -24,30 +25,27 @@ require 'systemu'
 require 'socket'
 
 module Mac
-  VERSION = '1.7.2'
-
-  def Mac.version
-    ::Mac::VERSION
-  end
-
-  def Mac.dependencies
-    {
-      'systemu' => [ 'systemu' , '~> 2.6.5' ]
-    }
-  end
-
-  def Mac.description
-    'cross platform mac address determination for ruby'
-  end
-
+  RE                      = %r/(?:[^:\-]|\A)(?:[0-9A-F][0-9A-F][:\-]){5}[0-9A-F][0-9A-F](?:[^:\-]|\Z)/io.freeze
+  CMDS                    = ['/sbin/ifconfig', '/bin/ifconfig', 'ifconfig', 'ipconfig /all', 'cat /sys/class/net/*/address'].freeze
+  PF_LINK                 = Socket.const_defined?(:PF_LINK) ? Socket::PF_LINK : nil
+  PF_PACKET               = Socket.const_defined?(:PF_PACKET) ? Socket::PF_PACKET : nil
+  INTERFACE_PACKET_FAMILY = PF_LINK || PF_PACKET # :nodoc:
+  VERSION                 = '1.8.0'
 
   class << self
+    def version
+      VERSION
+    end
 
-    ##
-    # Accessor for the system's first MAC address, requires a call to #address
-    # first
+    def dependencies
+      {
+        'systemu' => [ 'systemu' , '~> 2.6.5' ]
+      }
+    end
 
-    attr_accessor "mac_address"
+    def description
+      'cross platform mac address determination for ruby'
+    end
 
     ##
     # Discovers and returns the system's MAC addresses.  Returns the first
@@ -57,77 +55,64 @@ module Mac
     #   Mac.addr.list # => all addresses
 
     def address
-      return @mac_address if defined? @mac_address and @mac_address
-
-      @mac_address = from_getifaddrs
-      return @mac_address if @mac_address
-
-      cmds = '/sbin/ifconfig', '/bin/ifconfig', 'ifconfig', 'ipconfig /all', 'cat /sys/class/net/*/address'
-
-      output = nil
-      cmds.each do |cmd|
-        _, stdout, _ = systemu(cmd) rescue next
-        next unless stdout and stdout.size > 0
-        output = stdout and break
-      end
-      raise "all of #{ cmds.join ' ' } failed" unless output
-
-      @mac_address = parse(output)
-    end
-
-    link   = Socket::PF_LINK   if Socket.const_defined? :PF_LINK
-    packet = Socket::PF_PACKET if Socket.const_defined? :PF_PACKET
-    INTERFACE_PACKET_FAMILY = link || packet # :nodoc:
-
-    def from_getifaddrs
-      return unless Socket.respond_to? :getifaddrs
-
-      interfaces = Socket.getifaddrs.select do |addr|
-        if addr.addr  # Some VPN ifcs don't have an addr - ignore them
-          addr.addr.pfamily == INTERFACE_PACKET_FAMILY
-        end
-      end
-
-      mac, =
-        if Socket.const_defined? :PF_LINK then
-          interfaces.map do |addr|
-            addr.addr.getnameinfo
-          end.find do |m,|
-            !m.empty?
-          end
-        elsif Socket.const_defined? :PF_PACKET then
-          interfaces.map do |addr|
-            addr.addr.inspect_sockaddr[/hwaddr=([\h:]+)/, 1]
-          end.find do |mac_addr|
-            mac_addr != '00:00:00:00:00:00'
-          end
-        end
-
-      @mac_address = mac if mac
-    end
-
-    def parse(output)
-      lines = output.split(/\n/)
-
-      candidates = lines.select{|line| line =~ RE}
-      raise 'no mac address candidates' unless candidates.first
-      candidates.map!{|c| c[RE].strip}
-
-      maddr = candidates.first
-      raise 'no mac address found' unless maddr
-
-      maddr.strip!
-      maddr.instance_eval{ @list = candidates; def list() @list end }
-      maddr
+      @mac_address ||= from_getifaddrs || from_cmds
     end
 
     ##
     # Shorter alias for #address
 
-    alias_method "addr", "address"
-  end
+    alias_method :addr, :address
 
-  RE = %r/(?:[^:\-]|\A)(?:[0-9A-F][0-9A-F][:\-]){5}[0-9A-F][0-9A-F](?:[^:\-]|\Z)/io
+    def from_getifaddrs
+      return unless Socket.respond_to?(:getifaddrs)
+
+      interfaces = Socket.getifaddrs.map do |addr|
+        # Some VPN ifcs don't have an addr - ignore them
+        addr.addr if addr.addr.pfamily == INTERFACE_PACKET_FAMILY
+      end.compact
+
+      maddrs =
+        if PF_LINK
+          interfaces.map { |addr| addr.getnameinfo.first }.reject(&:empty?)
+        elsif PF_PACKET
+          interfaces.
+            map { |addr| addr.inspect_sockaddr[/hwaddr=([\h:]+)/, 1] }.
+            select { |mac_addr| mac_addr != '00:00:00:00:00:00' }
+        end
+
+      maddr = maddrs.first.dup
+
+      maddr.instance_eval { @list = maddrs; def list() @list end }
+      maddr
+    end
+
+    def from_cmds
+      output = CMDS.detect do |cmd|
+        _, stdout, _ = systemu(cmd) rescue next
+
+        break parse(stdout)
+      end
+
+      output.nil? ? (raise "all of #{ CMDS.join ' ' } failed") : output
+    end
+
+    def parse(output)
+      lines = output.split(/\n/)
+
+      candidates = lines.map do |line|
+        candidate = line[RE].to_s.strip
+
+        candidate unless candidate.empty?
+      end.compact
+
+      maddr = candidates.first.dup
+
+      raise 'no mac address found' unless maddr
+
+      maddr.instance_eval { @list = candidates; def list() @list end }
+      maddr
+    end
+  end
 end
 
 MacAddr = Macaddr = Mac
